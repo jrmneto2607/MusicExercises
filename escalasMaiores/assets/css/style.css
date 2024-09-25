@@ -1,0 +1,68 @@
+#titulo{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 3rem;
+}
+
+#header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 2rem;
+}
+#header .form{
+    font-size: 2rem;
+}
+
+
+
+#guitarra{
+    min-height: 500px;
+    
+    padding: 1% 2%;
+}
+
+#numInfo{
+    display: flex;
+    min-height: 40px;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+#numInfo div{
+   text-align: center;
+   font-size: 2rem;
+}
+
+.corda{
+    display: flex;
+    min-height: 80px;
+
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.corda div{
+    display: flex;
+    border: 2px dotted #333;
+    flex-basis: 60px;
+    border-radius: 30%;
+    font-size: 3rem;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+/*
+    CLASSES SEPARADAS PARA FUNCIONAMENTO DO SISTEMA 
+*/
+
+.naEscala{
+    background-color: rgb(70, 70, 179);
+    color: white;
+}
