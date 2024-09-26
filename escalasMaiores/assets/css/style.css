@@ -1,25 +1,67 @@
+body{
+    background-color: #d4d4d4;
+}
 #titulo{
     margin-top: 0;
     margin-bottom: 0;
     font-size: 3rem;
 }
 
-#header{
+#main{
+    min-width: 1250px;
+}
+
+#areaEscala .qEscala{
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 30px;
     margin-bottom: 2rem;
 }
-#header .form{
+#areaEscala .qEscala .form{
     font-size: 2rem;
+}
+
+#areaEscala .qEscala select{
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+#areaEscala .modelo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+#areaEscala .modelo h2{
+    font-size: 1.5rem;
+}
+
+#areaEscala .modeloImgs{
+    display: flex;
+    gap: 30px;
+}
+
+#areaEscala .modeloImgs div{
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+#areaEscala .modeloImgs p{
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: .9rem;
+    letter-spacing: .03rem;
 }
 
 
 
 #guitarra{
     min-height: 500px;
-    
     padding: 1% 2%;
 }
 
@@ -34,6 +76,7 @@
 #numInfo div{
    text-align: center;
    font-size: 2rem;
+   width: 100%;
 }
 
 .corda{
@@ -45,7 +88,7 @@
     gap: 10px;
 }
 
-.corda div{
+.corda .casa{
     display: flex;
     border: 2px dotted #333;
     flex-basis: 60px;
@@ -65,4 +108,8 @@
 .naEscala{
     background-color: rgb(70, 70, 179);
     color: white;
+}
+
+.notaPrincipal{
+    background-color:  #ff3234;
 }

@@ -5,12 +5,27 @@ var escalaCromatica = [
     "F#","G", "G#", "A", "A#", "B",
     "C", "C#", "D", "D#", "E", "F",
     "F#","G", "G#", "A", "A#", "B",
+    "C", "C#", "D", "D#", "E", "F",
+    "F#","G", "G#", "A", "A#", "B",
 ];
 
-var afinacao = ["E", "B", "G", "D", "A", "E"];
+
+modelosEscalas = [
+    [[4,1,2],[2,2,1],[2,2,1],[2,2],[2,1,2],[2,1,2]],
+    [[7,2],[2,1,2],[2,1,2],[2,2,1],[2,2,1],[2,2]],
+    [[9,2,1],[2,2,1],[2,2],[2,1,2],[2,1,2],[2,2,1]],
+    [[11,1,2],[2,1,2],[2,2,1],[2,2,1],[2,2],[2,1,2]],
+    [[2,2,1],[2,2],[2,1,2],[2,1,2],[2,2,1],[2,2,1]],
+];
+
+//var afinacao = ["E", "B", "G", "D", "A", "E"];
+var afinacao = ["E", "A", "D", "G", "B", "E"];
 var braco = document.getElementById("guitarra");
 var cordas = braco.getElementsByClassName("corda");
-var selectEscala = document.getElementById("selecionaEscala")
+var selectEscala = document.getElementById("selecionaEscala");
+selectEscala.value = ""
+var imgModelosEscalas = document.getElementsByClassName("trocaModeloEscala");
+
 
 
 function posicaoNota(nota){
@@ -19,8 +34,8 @@ function posicaoNota(nota){
 
 function inserindoNotaCordas(corda){
     indice = posicaoNota(afinacao[corda]);
-    casas = cordas[corda].getElementsByTagName("div")
-    for (i = 0; i < 13; i++ ){
+    casas = cordas[corda].getElementsByClassName("casa")
+    for (var i = 0; i < casas.length; i++ ){
         proxNota = escalaCromatica[indice + i];
         casas[i].innerHTML = proxNota;
     }
@@ -29,32 +44,56 @@ function inserindoNotaCordas(corda){
 
 function preenchendoBraco(){
     nCordas = cordas.length;
-    for (j = 0; j < cordas.length; j++){
+    for (var j = 0; j < cordas.length; j++){
         inserindoNotaCordas(j);
     }
 }
 
 function geraEscala(nota, escala = [2,2,1,2,2,2,1]){
-    indice = posicaoNota(nota);
-    next = indice;
-    escalaGerada = [escalaCromatica[next]];
-    for (i of escala){
-        next += i;
-        if (escalaGerada.indexOf(escalaCromatica[next]) == -1){
-            escalaGerada.push(escalaCromatica[next]);
+    if (nota == ""){
+        escalaGerada = [];
+    }else{
+        indice = posicaoNota(nota);
+        next = indice;
+        escalaGerada = [escalaCromatica[next]];
+        for (var i of escala){
+            next += i;
+            if (escalaGerada.indexOf(escalaCromatica[next]) == -1){
+                escalaGerada.push(escalaCromatica[next]);
+            }
         }
     }
-    return escalaGerada
+    
+    return escalaGerada;
 }
 
-function destacandoEscala(qualEscala){
-    if (qualEscala == ""){
-        return []
+function geraModelo(nota, modelo){
+    if (modelo == 0){
+        modeloGerado = [];
     }else{
-        escala = geraEscala(qualEscala);
+        iAlvo = posicaoNota(nota);
+        modelo -= 1;
+        modeloSelecionado = modelosEscalas[modelo]
         nCordas = cordas.length;
-        for (i = 0; i < nCordas; i++){
-            casas = cordas[i].getElementsByTagName("div");
+        modeloGerado = [];
+        for (var i = 0; i < nCordas; i++){
+            modeloGerado.push([]);
+            for (var j of modeloSelecionado[i]){
+                iAlvo += j;
+                modeloGerado[i].push(escalaCromatica[iAlvo]);
+            }
+        }
+    }
+
+    return modeloGerado;
+}
+
+function destacandoEscala(qualEscala, modelo = 0){ 
+    nCordas = cordas.length;
+    if(modelo == 0 || qualEscala == ""){
+        escala = geraEscala(qualEscala);   
+        for (var i = 0; i < nCordas; i++){
+            casas = cordas[i].getElementsByClassName("casa");
             for (c of casas){
                 valor = c.innerHTML;
                 if (escala.indexOf(valor) > -1){
@@ -66,12 +105,37 @@ function destacandoEscala(qualEscala){
                     }
                 }else{
                     c.classList.remove("naEscala");
+                    c.classList.remove("notaPrincipal");
                 }
             }
         }
-    }
-    
+    }else{
+        arrModelo = geraModelo(qualEscala, modelo);
 
+        for (var i = 0; i < nCordas; i++){
+            casas = cordas[i].getElementsByClassName("casa");
+            jaFoi = []
+            for (c of casas){
+                valor = c.innerHTML;
+                if ((arrModelo[i].indexOf(valor) > -1) && (jaFoi.indexOf(valor) == -1)){
+                    if (jaFoi.indexOf(arrModelo[i][0]) > -1 || valor == arrModelo[i][0]){
+                        jaFoi.push(valor);
+                        c.classList.add("naEscala");
+                        if(qualEscala == valor){
+                            c.classList.add("notaPrincipal");
+                        }else{
+                            c.classList.remove("notaPrincipal");
+                        }
+                    }
+                    
+                }else{
+                    c.classList.remove("naEscala");
+                    c.classList.remove("notaPrincipal");
+                }
+            }
+        }
+
+    }  
 }
 
 
@@ -84,4 +148,11 @@ preenchendoBraco();
 selectEscala.onchange = function(){
     valor = this.value
     destacandoEscala(valor)
+}
+
+for (var e of imgModelosEscalas){
+    e.addEventListener("click", function(event){
+        modelo = this.getAttribute("value");
+        destacandoEscala(selectEscala.value, modelo)
+    })
 }
