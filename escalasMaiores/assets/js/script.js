@@ -88,7 +88,39 @@ function geraModelo(nota, modelo){
     return modeloGerado;
 }
 
+
+function zerandoEstilo(){
+    for (var i = 0; i < cordas.length; i++){
+        casas = cordas[i].getElementsByClassName("casa");
+        for (c of casas){
+            c.classList.remove("naEscala");
+            c.classList.remove("notaPrincipal");
+        }
+    }
+}
+
+function casainicio(arrModelo){
+    if(modelo > 0){
+        notasinicioCordas = [];
+        for (var i = 0; i < cordas.length; i++){
+            casas = cordas[i].getElementsByClassName("casa");
+            for (var c = 0; c < casas.length; c++){
+                if (casas[c].innerHTML == arrModelo[i][0]){
+                    notasinicioCordas.push(c);
+                    break;
+                }
+            }
+        }
+
+        if (notasinicioCordas.indexOf(11) > -1){
+            notasinicioCordas = notasinicioCordas.map(n => n == 0? 12 : n);
+        }
+        return notasinicioCordas;
+    }
+}
+
 function destacandoEscala(qualEscala, modelo = 0){ 
+    zerandoEstilo();
     nCordas = cordas.length;
     if(modelo == 0 || qualEscala == ""){
         escala = geraEscala(qualEscala);   
@@ -111,13 +143,15 @@ function destacandoEscala(qualEscala, modelo = 0){
         }
     }else{
         arrModelo = geraModelo(qualEscala, modelo);
-
+        casaReferencia = casainicio(arrModelo);
+        console.log(casaReferencia);
         for (var i = 0; i < nCordas; i++){
             casas = cordas[i].getElementsByClassName("casa");
             jaFoi = []
-            for (c of casas){
+            for (var j = 0; j < casas.length; j++){
+                c = casas[j];
                 valor = c.innerHTML;
-                if ((arrModelo[i].indexOf(valor) > -1) && (jaFoi.indexOf(valor) == -1)){
+                if ((arrModelo[i].indexOf(valor) > -1) && (jaFoi.indexOf(valor) == -1)  && (j >= (casaReferencia[i] - 1))){
                     if (jaFoi.indexOf(arrModelo[i][0]) > -1 || valor == arrModelo[i][0]){
                         jaFoi.push(valor);
                         c.classList.add("naEscala");
